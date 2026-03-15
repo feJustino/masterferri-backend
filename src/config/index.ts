@@ -33,7 +33,7 @@ export interface Config {
   };
 }
 
-const requiredEnvVars = [
+export const requiredEnvVars = [
   'BLING_CLIENT_ID',
   'BLING_CLIENT_SECRET',
   'BLING_API_URL'
