@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import productsRoutes from './products.routes';
 import healthRoutes from './health.routes';
 import authRoutes from './auth.routes';
 
@@ -9,7 +8,6 @@ const router = Router();
 const API_VERSION = '/api/v1';
 
 // Registrar rotas
-router.use(`${API_VERSION}/products`, productsRoutes);
 router.use(`${API_VERSION}/health`, healthRoutes);
 router.use(`${API_VERSION}/auth`, authRoutes);
 

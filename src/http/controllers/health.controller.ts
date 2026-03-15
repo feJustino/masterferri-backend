@@ -8,7 +8,7 @@ export class HealthController {
   private logger = new Logger();
 
   constructor(
-    @inject('IHealthService') private healthService: IHealthService,
+    @inject('HealthService') private healthService: IHealthService,
   ) { }
 
   /**

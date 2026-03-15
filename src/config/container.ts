@@ -2,10 +2,10 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 
 // Imports das implementações
-import { ICacheRepository, ITokenRepository, IAuthService, IBlingApiService, IProductService, IHealthService, IFirebaseService } from '@/interfaces';
+import { ICacheRepository, ITokenRepository, IAuthService, IHealthService, IFirebaseService } from '@/interfaces';
 import { CacheRepository } from '@/repositories/cache.repository';
-import { AuthService, BlingApiService, ProductService, HealthService } from '@/services';
-import { ProductController, HealthController, AuthController } from '@/http/controllers';
+import { AuthService,  HealthService } from '@/services';
+import { HealthController, AuthController } from '@/http/controllers';
 import { MakeTokenRepository } from '@/services/factories/make-token-repository';
 import { FirebaseService } from '@/lib/firebase';
 
@@ -18,7 +18,7 @@ container.registerSingleton<IFirebaseService>('FirebaseService', FirebaseService
 
 // Token Repository (usando factory)
 container.registerSingleton(MakeTokenRepository);
-container.register<ITokenRepository>('ITokenRepository', {
+container.register<ITokenRepository>('TokenRepository', {
   useFactory: (container) => {
     const factory = container.resolve(MakeTokenRepository);
     return factory.createRepository();
@@ -27,14 +27,11 @@ container.register<ITokenRepository>('ITokenRepository', {
 
 // === SERVICES ===
 // Services são automaticamente resolvidos pelos decorators @inject
-container.registerSingleton<IAuthService>('IAuthService', AuthService);
-container.registerSingleton<IBlingApiService>('IBlingApiService', BlingApiService);
-container.registerSingleton<IProductService>('IProductService', ProductService);
-container.registerSingleton<IHealthService>('IHealthService', HealthService);
+container.registerSingleton<IAuthService>('AuthService', AuthService);
+container.registerSingleton<IHealthService>('HealthService', HealthService);
 
 // === CONTROLLERS ===
 // Controllers também são automaticamente resolvidos
-container.registerSingleton(ProductController);
 container.registerSingleton(HealthController);
 container.registerSingleton(AuthController);
 

@@ -7,7 +7,7 @@ import { Logger } from '@/utils';
 export class AuthController {
   private logger = new Logger();
 
-  constructor(@inject('IAuthService') private authService: IAuthService) { }
+  constructor(@inject('AuthService') private authService: IAuthService) { }
 
 
 

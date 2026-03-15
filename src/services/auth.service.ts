@@ -16,7 +16,7 @@ export class AuthService implements IAuthService {
     private readonly redirectUri = config.bling.redirectUri || 'http://localhost:3000/api/v1/auth/callback';
     private readonly basicAuth = Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64');
 
-    constructor(@inject('ITokenRepository') private tokenRepository: ITokenRepository) {
+    constructor(@inject('TokenRepository') private tokenRepository: ITokenRepository) {
         this.httpClient = axios.create({
             baseURL: this.blingBaseUrl,
             timeout: 10000,

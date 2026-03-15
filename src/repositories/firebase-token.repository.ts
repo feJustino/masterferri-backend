@@ -11,9 +11,13 @@ export class FirebaseTokenRepository implements ITokenRepository {
     private readonly CURRENT_DOC_ID = 'current';
 
     constructor(
-        @inject('FirebaseService')
         private firebaseService: IFirebaseService
-    ) { }
+    ) { 
+        if (!this.firebaseService.isInitialized()) {
+            this.logger.error('Firebase não inicializado. Verifique a configuração.');
+            throw new Error('Firebase não inicializado');
+        }
+    }
 
     async saveTokens(tokens: BlingTokens): Promise<void> {
         try {
@@ -80,36 +84,6 @@ export class FirebaseTokenRepository implements ITokenRepository {
         } catch (error) {
             this.logger.error('Erro ao remover tokens do Firebase', error as Error);
             throw new Error('Falha ao remover tokens do Firebase');
-        }
-    }
-
-    async getTokenHistory(limit: number = 10): Promise<BlingTokens[]> {
-        try {
-            const firestore = this.firebaseService.getFirestore();
-
-            const snapshot = await firestore
-                .collection(this.HISTORY_COLLECTION)
-                .orderBy('createdAt', 'desc')
-                .limit(limit)
-                .get();
-
-            return snapshot.docs.map(doc => doc.data() as BlingTokens);
-        } catch (error) {
-            this.logger.error('Erro ao buscar histórico de tokens', error as Error);
-            return [];
-        }
-    }
-
-    private async saveToHistory(tokenData: any): Promise<void> {
-        try {
-            const firestore = this.firebaseService.getFirestore();
-
-            await firestore
-                .collection(this.HISTORY_COLLECTION)
-                .add(tokenData);
-        } catch (error) {
-            this.logger.warn('Erro ao salvar histórico de token', error as Error);
-            // Não falha a operação principal
         }
     }
 

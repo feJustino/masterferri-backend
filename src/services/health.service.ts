@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { IHealthService, IBlingApiService, ICacheRepository } from '@/interfaces';
+import { IHealthService, ICacheRepository, IAuthService } from '@/interfaces';
 import { Logger } from '@/utils';
 
 @injectable()
@@ -8,7 +8,7 @@ export class HealthService implements IHealthService {
   private startTime = Date.now();
 
   constructor(
-    @inject('IBlingApiService') private blingApiService: IBlingApiService,
+    @inject('AuthService') private authService: IAuthService,
     @inject('ICacheRepository') private cacheRepository: ICacheRepository
   ) { }
 
@@ -55,7 +55,7 @@ export class HealthService implements IHealthService {
 
   private async checkBlingConnection(): Promise<'connected' | 'disconnected'> {
     try {
-      const isValid = await this.blingApiService.validateToken();
+      const isValid = await this.authService.validateToken();
       return isValid ? 'connected' : 'disconnected';
     } catch (error) {
       this.logger.warn('Bling connection check failed', { error: (error as Error).message });
